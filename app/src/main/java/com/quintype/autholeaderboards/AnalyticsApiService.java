@@ -1,6 +1,8 @@
 package com.quintype.autholeaderboards;
 
 
+import com.quintype.autholeaderboards.models.StoryResult;
+
 import io.reactivex.Observable;
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -19,12 +21,17 @@ public interface AnalyticsApiService {
     public static final String PATH_FACT = "fact";
 
     @GET("/api/v1/analytics/story/top/author/{" + PATH_FACT + "}")
-    Call<AuthorResponse> topAuthors(@Path(PATH_FACT) String fact, @Query
+    Call<LeaderboardResponse<AuthorResult>> topAuthors(@Path(PATH_FACT) String fact, @Query
             (PUBLISHER_ID) String publisherId, @Query(FILTERS) String filters, @Query(COUNT)
                                                 String count);
 
     @GET("/api/v1/analytics/story/top/author/{" + PATH_FACT + "}")
-    Observable<AuthorResponse> topAuthorsRx(@Path(PATH_FACT) String fact, @Query
+    Observable<LeaderboardResponse<AuthorResult>> topAuthorsRx(@Path(PATH_FACT) String fact, @Query
+            (PUBLISHER_ID) String publisherId, @Query(FILTERS) String filters, @Query(COUNT)
+            String count);
+
+    @GET("/api/v1/analytics/story/top/story/{" + PATH_FACT + "}")
+    Observable<LeaderboardResponse<StoryResult>> topStoryRx(@Path(PATH_FACT) String fact, @Query
             (PUBLISHER_ID) String publisherId, @Query(FILTERS) String filters, @Query(COUNT)
             String count);
 

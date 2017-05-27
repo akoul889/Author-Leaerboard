@@ -10,6 +10,7 @@ import com.bumptech.glide.RequestManager;
 import com.quintype.autholeaderboards.Author;
 import com.quintype.autholeaderboards.AuthorResult;
 import com.quintype.autholeaderboards.R;
+import com.quintype.autholeaderboards.utils.Constants;
 import com.quintype.autholeaderboards.utils.RoundedCornersTransformation;
 import com.quintype.autholeaderboards.utils.Utilities;
 import com.sasank.roundedhorizontalprogress.RoundedHorizontalProgressBar;
@@ -45,14 +46,21 @@ public class AuthorHolder extends RecyclerView.ViewHolder {
     public void bind(Author author, AuthorResult authorResult, int maxViews) {
         authorTitle.setText(author.name());
         if (authorResult != null) {
-            viewCount.setText(String.format("%s Views", authorResult.getCount()));
-            progressView.setMax(maxViews);
-            progressView.setProgress(authorResult.getCount());
+            viewCount.setText(String.format(Constants.VIEV_FORMAT, authorResult.getCount()));
+            if (progressView != null) {
+                progressView.setMax(maxViews);
+                progressView.setProgress(authorResult.getCount());
+            }
         }
 
         glideRequestManager.load(author.avatarUrl()).bitmapTransform(new
                 RoundedCornersTransformation(authorImage.getContext(),
-                Utilities.dpToPx(authorImage.getResources(), 5), 0)).error(R.drawable
-                .person_placeholder).into(authorImage);
+                Utilities.dpToPx(authorImage.getResources(), 5), 0))
+                .error(R.drawable.person_placeholder)
+                .placeholder(R.drawable.person_placeholder)
+                .dontAnimate()
+                .dontTransform().into(authorImage);
     }
+
+
 }

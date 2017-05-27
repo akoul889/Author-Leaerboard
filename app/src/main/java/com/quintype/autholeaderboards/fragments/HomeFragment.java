@@ -50,21 +50,8 @@ public class HomeFragment extends BaseFragment {
                 .title_top_stories));
         pagerAdapter.addFragment(new TopAuthorFragment(), getResources().getString(R.string
                 .title_top_authors), topAuthorsBundle);
-        pagerAdapter.addFragment(new TopAuthorFragment(), getResources().getString(R.string
+        pagerAdapter.addFragment(new TopStoriesFragment(), getResources().getString(R.string
                 .title_top_stories), topStoriesBundle);
-//        pagerAdapter.addFragment(new WatchFragment(), getResources().getString(R.string
-//                .title_watch), new Bundle());
-//
-//        Bundle dedicateBundle = new Bundle();
-//        dedicateBundle.putString(getResources().getString(R.string.tab_name_text), getResources
-// ().getString(R.string
-//                .title_dedicate));
-//        pagerAdapter.addFragment(new HomeStoriesFragment(), getResources().getString(R.string
-//                .title_dedicate), dedicateBundle);
-//
-//        pagerAdapter.addFragment(new SoundcloudListFragment(), getResources().getString(R.string
-//                .title_listen), new
-//                Bundle());
         viewPager.setAdapter(pagerAdapter);
     }
 

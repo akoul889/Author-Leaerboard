@@ -16,17 +16,24 @@
         android:orientation="vertical"
         android:padding="10dp">
 
-        <ImageView
+        <com.mikhaellopez.circularimageview.CircularImageView
             android:id="@+id/author_image"
             android:layout_width="64dp"
-            android:layout_height="64dp"/>
+            android:layout_height="64dp"
+            android:src="@drawable/person_placeholder"
+            app:civ_border_color="@color/progress_fill"
+            app:civ_border_width="2dp"
+            app:civ_shadow="false"
+            app:civ_shadow_color="@color/progress_background"
+            app:civ_shadow_radius="10"/>
 
         <TextView
             android:id="@+id/author_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
-            android:layout_toRightOf="@id/author_image"/>
+            android:layout_toRightOf="@id/author_image"
+            android:textStyle="bold"/>
 
         <TextView
             android:id="@+id/view_count"
@@ -43,13 +50,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/view_count"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="8dp"
             android:layout_toRightOf="@id/author_image"
             android:indeterminate="false"
             android:maxHeight="12dp"
             android:minHeight="12dp"
             android:progress="40"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="8dp"
             app:backgroundColor="@color/progress_background"
             app:progressColor="@color/progress_fill"/>
 

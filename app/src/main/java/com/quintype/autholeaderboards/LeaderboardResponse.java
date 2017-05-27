@@ -9,16 +9,16 @@ import java.util.List;
  * Created by akshaykoul on 26/05/17.
  */
 
-public class AuthorResponse {
+public class LeaderboardResponse<T> {
     @SerializedName("result")
     @Expose
-    private List<AuthorResult> result = null;
+    private List<T> result = null;
 
-    public List<AuthorResult> getResult() {
+    public List<T> getResult() {
         return result;
     }
 
-    public void setResult(List<AuthorResult> result) {
+    public void setResult(List<T> result) {
         this.result = result;
     }
 }

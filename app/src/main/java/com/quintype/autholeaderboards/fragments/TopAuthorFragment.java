@@ -1,20 +1,20 @@
 package com.quintype.autholeaderboards.fragments;
 
-import android.app.Fragment;
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.quintype.autholeaderboards.Author;
-import com.quintype.autholeaderboards.AuthorResponse;
 import com.quintype.autholeaderboards.AuthorResult;
 import com.quintype.autholeaderboards.LeaderboardApiClient;
+import com.quintype.autholeaderboards.LeaderboardResponse;
 import com.quintype.autholeaderboards.R;
 import com.quintype.autholeaderboards.adapters.AuthorAdapter;
+import com.quintype.autholeaderboards.utils.RecyclerItemClickListener;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -30,18 +30,16 @@ import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
 
-public class TopAuthorFragment extends Fragment {
+public class TopAuthorFragment extends BaseFragment {
 
-    //    @BindView(R.id.author_recycler_view)
-    RecyclerView authorRecyclerView;
-    //    @BindView(R.id.fragment_title)
-    TextView fragmentTitle;
-    private FragmentCallbacks mListener;
+    RecyclerView recyclerView;
+    ProgressBar progressView;
     private String title;
     List<Author> authorArrayList = new ArrayList<>();
-    AuthorAdapter authorAdapter =  new AuthorAdapter(authorArrayList);
+    AuthorAdapter authorAdapter = new AuthorAdapter(authorArrayList);
     int maxViews = 0;
-    Map<Integer,AuthorResult> resultMap = new HashMap<Integer, AuthorResult>();
+    Map<Integer, AuthorResult> resultMap = new HashMap<Integer, AuthorResult>();
+
     public static final String filters = "{\"start-ts\":1495564200000, \"end-ts\":1495756799000," +
             "  " +
             "\"tags\":[], \"author-ids\":[], \"sections\":[], \"assignee-ids\":[], " +
@@ -51,21 +49,12 @@ public class TopAuthorFragment extends Fragment {
         // Required empty public constructor
     }
 
-    public static TopAuthorFragment newInstance(String param1, String param2) {
-        TopAuthorFragment fragment = new TopAuthorFragment();
-        Bundle args = new Bundle();
-//        args.putString(ARG_PARAM1, param1);
-//        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             title = getArguments().getString(getString(R.string.tab_name_text));
-//            mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
 
@@ -73,11 +62,34 @@ public class TopAuthorFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_top_author, container, false);
-        fragmentTitle = (TextView) view.findViewById(R.id.fragment_title);
-        authorRecyclerView = (RecyclerView) view.findViewById(R.id.author_recycler_view);
-        fragmentTitle.setText(title);
-        authorRecyclerView.setAdapter(authorAdapter);
+        View view = inflater.inflate(R.layout.fragment_top_list, container, false);
+        progressView = (ProgressBar) view.findViewById(R.id.progress_view);
+        recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
+        recyclerView.setAdapter(authorAdapter);
+        recyclerView.addOnItemTouchListener(new RecyclerItemClickListener
+                (getActivity().getApplicationContext(), recyclerView, new
+                        RecyclerItemClickListener
+                                .OnItemClickListener() {
+                            @Override
+                            public void onItemClick(View view, int position) {
+//                        currentlyPlaying = position;
+//                        nowPlayingAdapter.setCurrentlyPlaying(position);
+//                        nowPlayingAdapter.notifyDataSetChanged();
+//                        presenter.playNewTrack(position, storageUtil);
+                                Author author = authorArrayList.get(position);
+                                AuthorResult authorResult = resultMap.get(Integer.parseInt(author
+                                        .id()));
+                                fragmentCallbacks.addFragment(AuthorFragment.newInstance(author,
+                                        authorResult), AuthorFragment.class.getSimpleName());
+                            }
+
+                            @Override
+                            public void onItemLongClick(View view, int position) {
+                                Toast.makeText(getActivity(), "Long Clicked " + authorArrayList
+                                        .get(position)
+                                        .name(), Toast.LENGTH_SHORT).show();
+                            }
+                        }));
         if (title.equals(getString(R.string.title_top_authors))) {
             getAuthorList("view", "1", filters, "10");
         }
@@ -87,11 +99,11 @@ public class TopAuthorFragment extends Fragment {
     private void getAuthorList(String fact, String publisherId, String filters, String count) {
         LeaderboardApiClient.getAnalyticsApiService().topAuthorsRx(fact, publisherId, filters,
                 count)
-                .map(new Function<AuthorResponse, List<AuthorResult>>() {
+                .map(new Function<LeaderboardResponse, List<AuthorResult>>() {
                     @Override
-                    public List<AuthorResult> apply(AuthorResponse authorResponse) throws
+                    public List<AuthorResult> apply(LeaderboardResponse leaderboardResponse) throws
                             Exception {
-                        return authorResponse.getResult();
+                        return leaderboardResponse.getResult();
                     }
                 })
                 .flatMapIterable(new Function<List<AuthorResult>, List<AuthorResult>>() {
@@ -104,8 +116,8 @@ public class TopAuthorFragment extends Fragment {
                 .doOnNext(new Consumer<AuthorResult>() {
                     @Override
                     public void accept(AuthorResult authorResult) throws Exception {
-                        maxViews = Math.max(maxViews,authorResult.getCount());
-                        resultMap.put(authorResult.getAuthorId(),authorResult);
+                        maxViews = Math.max(maxViews, authorResult.getCount());
+                        resultMap.put(authorResult.getAuthorId(), authorResult);
                     }
                 })
                 .flatMap(new Function<AuthorResult, ObservableSource<Author>>() {
@@ -125,6 +137,7 @@ public class TopAuthorFragment extends Fragment {
 
                     @Override
                     public void onSubscribe(Disposable d) {
+                        progressView.setVisibility(View.VISIBLE);
 
                         Timber.i("onSubscribe");
                     }
@@ -137,44 +150,22 @@ public class TopAuthorFragment extends Fragment {
 
                     @Override
                     public void onError(Throwable e) {
+                        progressView.setVisibility(View.GONE);
                         Timber.e("onError" + e.getMessage());
                     }
 
                     @Override
                     public void onComplete() {
+                        progressView.setVisibility(View.GONE);
                         authorArrayList = authors;
                         authorAdapter.setResultMap(resultMap);
                         authorAdapter.setMaxViews(maxViews);
                         authorAdapter.clearAll();
                         authorAdapter.addAuthors(authors);
                         authorAdapter.notifyDataSetChanged();
-                        fragmentTitle.setVisibility(View.GONE);
                         Timber.i("onComplete");
                     }
                 });
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof FragmentCallbacks) {
-            mListener = (FragmentCallbacks) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-//        unbinder.unbind();
     }
 
 
