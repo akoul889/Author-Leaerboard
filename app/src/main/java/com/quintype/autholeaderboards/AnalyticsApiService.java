@@ -2,6 +2,7 @@ package com.quintype.autholeaderboards;
 
 
 import com.quintype.autholeaderboards.models.StoryResult;
+import com.quintype.autholeaderboards.models.ViewTimeResult;
 
 import io.reactivex.Observable;
 import retrofit2.Call;
@@ -23,17 +24,21 @@ public interface AnalyticsApiService {
     @GET("/api/v1/analytics/story/top/author/{" + PATH_FACT + "}")
     Call<LeaderboardResponse<AuthorResult>> topAuthors(@Path(PATH_FACT) String fact, @Query
             (PUBLISHER_ID) String publisherId, @Query(FILTERS) String filters, @Query(COUNT)
-                                                String count);
+                                                               String count);
 
     @GET("/api/v1/analytics/story/top/author/{" + PATH_FACT + "}")
     Observable<LeaderboardResponse<AuthorResult>> topAuthorsRx(@Path(PATH_FACT) String fact, @Query
             (PUBLISHER_ID) String publisherId, @Query(FILTERS) String filters, @Query(COUNT)
-            String count);
+                                                                       String count);
 
     @GET("/api/v1/analytics/story/top/story/{" + PATH_FACT + "}")
     Observable<LeaderboardResponse<StoryResult>> topStoryRx(@Path(PATH_FACT) String fact, @Query
             (PUBLISHER_ID) String publisherId, @Query(FILTERS) String filters, @Query(COUNT)
-            String count);
+                                                                    String count);
+
+    @GET("/api/v1/analytics/story/time-slice/story/{" + PATH_FACT + "}")
+    Observable<LeaderboardResponse<ViewTimeResult>> topAuthorGraphData(@Path(PATH_FACT) String fact, @Query
+            (PUBLISHER_ID) String publisherId, @Query(FILTERS) String filters, @Query(COUNT) String count);
 
 
 }

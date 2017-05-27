@@ -30,6 +30,8 @@ import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
 
+import static com.quintype.autholeaderboards.fragments.TopAuthorFragment.filters;
+
 public class TopStoriesFragment extends BaseFragment {
 
     RecyclerView recyclerView;
@@ -39,11 +41,6 @@ public class TopStoriesFragment extends BaseFragment {
     StoryAdapter storyAdapter = new StoryAdapter(storiesArrayList, false);
     int maxViews = 0;
     Map<String, StoryResult> resultMap = new HashMap<>();
-
-    public static final String filters = "{\"start-ts\":1495564200000, \"end-ts\":1495756799000," +
-            "  " +
-            "\"tags\":[], \"author-ids\":[], \"sections\":[], \"assignee-ids\":[], " +
-            "\"story-templates\":[], \"devices\":[], \"referrer-ids\":[]}";
 
     public TopStoriesFragment() {
         // Required empty public constructor
@@ -92,7 +89,6 @@ public class TopStoriesFragment extends BaseFragment {
                             }
                         }));
         if (title.equals(getString(R.string.title_top_stories))) {
-//            getAuthorList("view", "1", filters, "10");
             getStoriesList("view", 1, filters, "10");
         }
         return view;

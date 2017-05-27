@@ -3,6 +3,9 @@ package com.quintype.autholeaderboards.fragments;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
@@ -65,6 +68,7 @@ public class AuthorFragment extends BaseFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
         if (getArguments() != null) {
             author = getArguments().getParcelable(ARG_AUTHOR);
             authorResult = getArguments().getParcelable(ARG_AUTHOR_RESULT);
@@ -144,5 +148,19 @@ public class AuthorFragment extends BaseFragment {
                 });
     }
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.analytics_menu, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.action_analytics) {
+            fragmentCallbacks.addFragment(AuthorGraphFragment.newInstance(author, authorResult),
+                    AuthorGraphFragment.class.getName());
+            return true;
+        } else
+            return super.onOptionsItemSelected(item);
+    }
 }
