@@ -14,6 +14,7 @@ import com.quintype.autholeaderboards.AuthorResponse;
 import com.quintype.autholeaderboards.AuthorResult;
 import com.quintype.autholeaderboards.LeaderboardApiClient;
 import com.quintype.autholeaderboards.R;
+import com.quintype.autholeaderboards.adapters.AuthorAdapter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -38,6 +39,8 @@ public class TopAuthorFragment extends Fragment {
     private FragmentCallbacks mListener;
     private String title;
     List<Author> authorArrayList = new ArrayList<>();
+    AuthorAdapter authorAdapter =  new AuthorAdapter(authorArrayList);
+    int maxViews = 0;
     Map<Integer,AuthorResult> resultMap = new HashMap<Integer, AuthorResult>();
     public static final String filters = "{\"start-ts\":1495564200000, \"end-ts\":1495756799000," +
             "  " +
@@ -74,7 +77,10 @@ public class TopAuthorFragment extends Fragment {
         fragmentTitle = (TextView) view.findViewById(R.id.fragment_title);
         authorRecyclerView = (RecyclerView) view.findViewById(R.id.author_recycler_view);
         fragmentTitle.setText(title);
-        getAuthorList("view", "1", filters, "10");
+        authorRecyclerView.setAdapter(authorAdapter);
+        if (title.equals(getString(R.string.title_top_authors))) {
+            getAuthorList("view", "1", filters, "10");
+        }
         return view;
     }
 
@@ -98,6 +104,7 @@ public class TopAuthorFragment extends Fragment {
                 .doOnNext(new Consumer<AuthorResult>() {
                     @Override
                     public void accept(AuthorResult authorResult) throws Exception {
+                        maxViews = Math.max(maxViews,authorResult.getCount());
                         resultMap.put(authorResult.getAuthorId(),authorResult);
                     }
                 })
@@ -136,6 +143,12 @@ public class TopAuthorFragment extends Fragment {
                     @Override
                     public void onComplete() {
                         authorArrayList = authors;
+                        authorAdapter.setResultMap(resultMap);
+                        authorAdapter.setMaxViews(maxViews);
+                        authorAdapter.clearAll();
+                        authorAdapter.addAuthors(authors);
+                        authorAdapter.notifyDataSetChanged();
+                        fragmentTitle.setVisibility(View.GONE);
                         Timber.i("onComplete");
                     }
                 });

@@ -2,8 +2,10 @@ package com.quintype.autholeaderboards.activities;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 
+import com.quintype.autholeaderboards.R;
 import com.quintype.autholeaderboards.fragments.FragmentCallbacks;
 
 import java.util.ArrayList;
@@ -16,39 +18,39 @@ public abstract class FragmentActivity extends AppCompatActivity implements Frag
         FragmentManager.OnBackStackChangedListener {
     ArrayList<Fragment> mFragmentList = new ArrayList<>();
     Fragment mFragment;
-    AppCompatActivity mContext;
+    public AppCompatActivity mContext;
 
 
     public void addFragment(Fragment fragment, String mBackStack) {
         if (mContext == null) {
             return;
         }
-//        mFragmentList.add(fragment);
-//
-//        FragmentTransaction fragmentTransaction = mContext.getFragmentManager().beginTransaction();
-//        fragmentTransaction.add(R.id.home_container, fragment);
-//
-//        if (mBackStack != null) {
-//            fragmentTransaction.addToBackStack(mBackStack);
-//        }
-//        mFragment = fragment;
-//        fragmentTransaction.commit();
+        mFragmentList.add(fragment);
+
+        FragmentTransaction fragmentTransaction = mContext.getFragmentManager().beginTransaction();
+        fragmentTransaction.add(R.id.home_container, fragment);
+
+        if (mBackStack != null) {
+            fragmentTransaction.addToBackStack(mBackStack);
+        }
+        mFragment = fragment;
+        fragmentTransaction.commit();
     }
 
     public void replaceFragment(Fragment fragment, String mBackStack) {
         if (mContext == null) {
             return;
         }
-//        mFragmentList.add(fragment);
-//
-//        FragmentTransaction fragmentTransaction = mContext.getFragmentManager().beginTransaction();
-//        fragmentTransaction.replace(R.id.home_container, fragment);
-//
-//        if (mBackStack != null) {
-//            fragmentTransaction.addToBackStack(mBackStack);
-//        }
-//        mFragment = fragment;
-//        fragmentTransaction.commit();
+        mFragmentList.add(fragment);
+
+        FragmentTransaction fragmentTransaction = mContext.getFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.home_container, fragment);
+
+        if (mBackStack != null) {
+            fragmentTransaction.addToBackStack(mBackStack);
+        }
+        mFragment = fragment;
+        fragmentTransaction.commit();
     }
 
     public Fragment getmFragment() {
