@@ -67,6 +67,11 @@ public class StoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             ((StoryHolder) holder).bind(storyList.get(position), storyResult,
                     isAuthorStories ? authorResult
                             .getCount() : maxViews);
+            if (isAuthorStories) {
+                ((StoryHolder) holder).showMedal(position == 1);
+            } else {
+                ((StoryHolder) holder).showMedal(position == 0);
+            }
         } else if (holder instanceof AuthorHolder) {
             ((AuthorHolder) holder).bind(author, authorResult, authorResult.getCount());
         }

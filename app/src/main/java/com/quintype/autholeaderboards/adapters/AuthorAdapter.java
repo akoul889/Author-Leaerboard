@@ -41,7 +41,8 @@ public class AuthorAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         if (holder instanceof AuthorHolder) {
             AuthorResult authorResult = resultMap.get(Integer.parseInt(authorList.get(position).id
                     ()));
-            ((AuthorHolder) holder).bind(authorList.get(position), authorResult,maxViews);
+            ((AuthorHolder) holder).bind(authorList.get(position), authorResult, maxViews);
+            ((AuthorHolder) holder).showMedal(position == 0);
         }
     }
 
@@ -57,7 +58,7 @@ public class AuthorAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         notifyItemRangeInserted(start, end);
     }
 
-    public void setMaxViews(int count){
+    public void setMaxViews(int count) {
         maxViews = count;
     }
 

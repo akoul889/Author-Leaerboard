@@ -24,6 +24,7 @@ public class StoryHolder extends RecyclerView.ViewHolder {
     TextView headline;
     TextView viewCount;
     ImageView heroImage;
+    ImageView firstMedal;
     RoundedHorizontalProgressBar progressView;
     RequestManager glideRequestManager;
     private boolean progressStarted = true;
@@ -38,6 +39,7 @@ public class StoryHolder extends RecyclerView.ViewHolder {
         trackHolder.headline = (TextView) view.findViewById(R.id.headline);
         trackHolder.heroImage = (ImageView) view.findViewById(R.id.hero_image);
         trackHolder.viewCount = (TextView) view.findViewById(R.id.view_count);
+        trackHolder.firstMedal = (ImageView) view.findViewById(R.id.first_medal);
         trackHolder.progressView = (RoundedHorizontalProgressBar) view.findViewById(R.id
                 .view_count_progress);
         return trackHolder;
@@ -66,5 +68,13 @@ public class StoryHolder extends RecyclerView.ViewHolder {
                 return true;
             }
         });
+    }
+
+
+    public void showMedal(boolean show) {
+        if (firstMedal != null) {
+            firstMedal.setVisibility(show ? View.VISIBLE : View.GONE);
+        }
+
     }
 }

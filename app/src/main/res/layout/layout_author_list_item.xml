@@ -16,10 +16,18 @@
         android:orientation="vertical"
         android:padding="10dp">
 
+        <ImageView
+            android:id="@+id/first_medal"
+            android:layout_width="58dp"
+            android:layout_height="58dp"
+            android:layout_alignParentRight="true"
+            android:visibility="gone"
+            android:src="@drawable/medal"/>
+
         <com.mikhaellopez.circularimageview.CircularImageView
             android:id="@+id/author_image"
-            android:layout_width="64dp"
-            android:layout_height="64dp"
+            android:layout_width="58dp"
+            android:layout_height="58dp"
             android:src="@drawable/person_placeholder"
             app:civ_border_color="@color/progress_fill"
             app:civ_border_width="2dp"
@@ -32,7 +40,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
             android:layout_toRightOf="@id/author_image"
+            android:layout_toLeftOf="@id/first_medal"
             android:textStyle="bold"/>
 
         <TextView
@@ -41,6 +51,8 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/author_name"
             android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_toLeftOf="@id/first_medal"
             android:layout_marginTop="8dp"
             android:layout_toRightOf="@id/author_image"/>
 
@@ -49,10 +61,9 @@
             style="?android:attr/progressBarStyleHorizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/view_count"
+            android:layout_below="@id/author_image"
             android:layout_marginLeft="10dp"
             android:layout_marginTop="8dp"
-            android:layout_toRightOf="@id/author_image"
             android:indeterminate="false"
             android:maxHeight="12dp"
             android:minHeight="12dp"

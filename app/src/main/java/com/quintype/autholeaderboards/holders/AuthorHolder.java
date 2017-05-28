@@ -26,6 +26,7 @@ public class AuthorHolder extends RecyclerView.ViewHolder {
     ImageView authorImage;
     RoundedHorizontalProgressBar progressView;
     RequestManager glideRequestManager;
+    ImageView firstMedal;
     private boolean progressStarted = true;
 
     public AuthorHolder(View itemView) {
@@ -38,6 +39,7 @@ public class AuthorHolder extends RecyclerView.ViewHolder {
         trackHolder.authorTitle = (TextView) view.findViewById(R.id.author_name);
         trackHolder.authorImage = (ImageView) view.findViewById(R.id.author_image);
         trackHolder.viewCount = (TextView) view.findViewById(R.id.view_count);
+        trackHolder.firstMedal = (ImageView) view.findViewById(R.id.first_medal);
         trackHolder.progressView = (RoundedHorizontalProgressBar) view.findViewById(R.id
                 .view_count_progress);
         return trackHolder;
@@ -60,6 +62,13 @@ public class AuthorHolder extends RecyclerView.ViewHolder {
                 .placeholder(R.drawable.person_placeholder)
                 .dontAnimate()
                 .dontTransform().into(authorImage);
+    }
+
+    public void showMedal(boolean show) {
+        if (firstMedal != null) {
+            firstMedal.setVisibility(show ? View.VISIBLE : View.GONE);
+        }
+
     }
 
 
